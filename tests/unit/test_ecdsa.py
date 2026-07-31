@@ -9,6 +9,7 @@ from rawwalletai.transactions.signer_psbt import PSBTSigner
 from rawwalletai.transactions.psbt import PSBT, PSBTInput, PSBTOutput
 
 
+# Known test vector: deterministic key + message
 KNOWN_TEST_VECTOR = {
     "private_key": bytes([i % 256 for i in range(32)]),
     "message": b"Bitcoin test vector for ECDSA",
