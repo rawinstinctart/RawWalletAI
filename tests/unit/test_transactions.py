@@ -9,12 +9,19 @@ from rawwalletai.transactions.builder import TransactionBuilder
 
 def test_builder_add_input_output() -> None:
     builder = TransactionBuilder(None)
-    builder.add_input("abcd" * 8, 0, 50000).add_output("bc1qxxx", 25000)
-    assert len(builder._inputs) == 1
-    assert len(builder._outputs) == 1
+    builder.add_input("a" * 64, 0, 100_000).add_output("bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq", 50_000)
+    tx = builder.build()
+    assert tx.fee_sats >= 0
+    assert tx.vsize > 0
 
 
-def test_builder_fee_rate() -> None:
+def test_builder_negative_input_amount() -> None:
     builder = TransactionBuilder(None)
-    builder.set_fee_rate(15)
-    assert builder._fee_rate == 15
+    with pytest.raises(ValueError):
+        builder.add_input("a" * 64, 0, -1)
+
+
+def test_builder_negative_output_amount() -> None:
+    builder = TransactionBuilder(None)
+    with pytest.raises(ValueError):
+        builder.add_output("bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq", -1)

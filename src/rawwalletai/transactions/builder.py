@@ -40,7 +40,7 @@ def _double_sha256(data: bytes) -> bytes:
 
 
 class TransactionBuilder:
-    """Builds and signs Bitcoin transactions."""
+    """Builds Bitcoin transactions."""
 
     def __init__(self, chain) -> None:
         self.chain = chain
@@ -71,6 +71,11 @@ class TransactionBuilder:
             raise ValueError("Transaction has no inputs")
         if not self._outputs:
             raise ValueError("Transaction has no outputs")
+        total_in = sum(inp.amount_sats for inp in self._inputs)
+        total_out = sum(out.amount_sats for out in self._outputs)
+        fee = max(0, total_in - total_out)
+        vsize = max(1, len(self._inputs) * 41 + len(self._outputs) * 31 + 10)
+        fee = max(0, vsize * self._fee_rate)
         psbt_inputs = [
             PSBTInput(
                 txid=bytes.fromhex(inp.txid),
@@ -91,15 +96,11 @@ class TransactionBuilder:
         psbt = PSBT(inputs=psbt_inputs, outputs=psbt_outputs)
         serialized = psbt.serialize()
         txid = "".join(f"{b:02x}" for b in _double_sha256(serialized)[::-1])
-        fee = max(0, len(serialized) * self._fee_rate)
         return RawTransaction(
             txid=txid,
             hex=serialized.hex(),
             inputs=list(self._inputs),
             outputs=list(self._outputs),
             fee_sats=fee,
-            vsize=len(serialized),
+            vsize=vsize,
         )
-
-    def sign(self, private_key_bytes: bytes) -> str:
-        raise NotImplementedError("Transaction signing not yet implemented")
