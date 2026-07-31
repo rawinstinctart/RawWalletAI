@@ -7,6 +7,8 @@ from pathlib import Path
 from typing import Any
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives import hashes
 from pydantic import BaseModel
 
 from rawwalletai.config.settings import WalletSettings
@@ -21,20 +23,12 @@ class EncryptedStorage(BaseModel):
     def _encrypt(self, data: bytes) -> bytes:
         """Encrypt data with AES-256-GCM."""
         aesgcm = AESGCM(self.key)
-        nonce = hasattr(self, "_nonce_bytes") and getattr(
-            self, "_nonce_bytes"
-        ) or None
-        if nonce is None:
-            from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-            from cryptography.hazmat.primitives import hashes
-
-            derived = HKDF(
-                algorithm=hashes.SHA256(),
-                length=12,
-                salt=None,
-                info=b"rawwalletai-nonce",
-            ).derive(self.key)
-            nonce = derived
+        nonce = HKDF(
+            algorithm=hashes.SHA256(),
+            length=12,
+            salt=None,
+            info=b"rawwalletai-nonce",
+        ).derive(self.key)
         ciphertext = aesgcm.encrypt(nonce, data, None)
         return nonce + ciphertext
 
