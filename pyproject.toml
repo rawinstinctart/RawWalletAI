@@ -1,9 +1,9 @@
 [build-system]
 requires = ["setuptools>=70", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "openclaw-wallet"
+name = "rawwalletai"
 version = "0.1.0"
 description = "Autonome Krypto-Wallet-Engine für automatisierte Systeme und AI-Agenten."
 readme = "README.md"
@@ -12,7 +12,7 @@ requires-python = ">=3.11"
 authors = [
     {name = "Pascal Haux", email = "rawinstinctai@mail.de"}
 ]
-keywords = ["bitcoin", "wallet", "autonomous", "agent", "bdk", "self-custody"]
+keywords = ["bitcoin", "wallet", "autonomous", "agent", "self-custody"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
@@ -23,9 +23,9 @@ classifiers = [
     "Topic :: Security :: Cryptography",
 ]
 dependencies = [
-    "bdk>=0.10.0",
     "cryptography>=42.0",
     "pydantic>=2.0",
+    "mnemonic>=0.20",
     "fastapi>=0.100",
     "uvicorn>=0.23",
 ]
