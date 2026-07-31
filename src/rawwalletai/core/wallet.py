@@ -65,6 +65,7 @@ class WalletManager:
                 "mnemonic": mnemonic,
                 "address": address.address,
                 "script_type": address.script_type,
+                "script_pubkey": address.script_pubkey.hex(),
                 "path": address.path or "",
             },
         )
@@ -95,6 +96,7 @@ class WalletManager:
             address = BitcoinAddress(
                 address=data["address"],
                 script_type=data.get("script_type", "p2wpkh"),
+                script_pubkey=bytes.fromhex(data.get("script_pubkey", "")),
                 path=data.get("path"),
             )
             wallet = Wallet(

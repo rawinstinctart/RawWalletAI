@@ -1,11 +1,7 @@
 """BIP-32 master key derivation tests."""
 
-from pathlib import Path
-
-import pytest
-
-from rawwalletai.core.keys import KeyManager
 from rawwalletai.config.settings import WalletSettings
+from rawwalletai.core.keys import KeyManager
 
 
 def test_bip32_master_key_derivation() -> None:
