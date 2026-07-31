@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 from dataclasses import dataclass
 
 from mnemonic import Mnemonic
@@ -47,16 +48,9 @@ class KeyManager:
 
     def derive_master_key(self, seed: bytes) -> tuple[bytes, bytes]:
         """Derive master private key and chain code from seed (BIP-32)."""
-        # BIP-32 master key derivation
-        hmac = hashlib.pbkdf2_hmac(
-            "sha512",
-            b"Bitcoin seed",
-            seed,
-            2048,
-            dklen=64,
-        )
-        master_private_key = hmac[:32]
-        master_chain_code = hmac[32:]
+        digest = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
+        master_private_key = digest[:32]
+        master_chain_code = digest[32:]
         self._master_key = master_private_key
         self._master_chain_code = master_chain_code
         return master_private_key, master_chain_code

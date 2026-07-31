@@ -14,10 +14,11 @@ def _double_sha256(data: bytes) -> bytes:
 
 
 class BitcoinAddress:
-    def __init__(self, address: str, script_type: str, script_pubkey: bytes):
+    def __init__(self, address: str, script_type: str, script_pubkey: bytes, path: str | None = None):
         self.address = address
         self.script_type = script_type
         self.script_pubkey = script_pubkey
+        self.path = path
 
 
 class BitcoinChain:

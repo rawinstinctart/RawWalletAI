@@ -47,7 +47,6 @@ def create_wallet(req: CreateWalletRequest) -> dict:
     return {
         "wallet_id": wallet.wallet_id,
         "address": wallet.address.address,
-        "mnemonic": wallet.key_manager._mnemonic,
     }
 
 

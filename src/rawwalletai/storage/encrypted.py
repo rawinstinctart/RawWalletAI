@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from typing import Any
 
 from cryptography.hazmat.primitives import hashes
@@ -21,21 +22,24 @@ class EncryptedStorage(BaseModel):
 
     def _encrypt(self, data: bytes) -> bytes:
         """Encrypt data with AES-256-GCM."""
+        salt = os.urandom(16)
         aesgcm = AESGCM(self.key)
         nonce = HKDF(
             algorithm=hashes.SHA256(),
             length=12,
-            salt=None,
+            salt=salt,
             info=b"rawwalletai-nonce",
         ).derive(self.key)
         ciphertext = aesgcm.encrypt(nonce, data, None)
-        return nonce + ciphertext
+        return salt + nonce + ciphertext
 
     def _decrypt(self, encrypted: bytes) -> bytes:
         """Decrypt data with AES-256-GCM."""
+        if len(encrypted) < 28:
+            raise ValueError("Encrypted data too short")
+        nonce = encrypted[16:28]
+        ciphertext = encrypted[28:]
         aesgcm = AESGCM(self.key)
-        nonce = encrypted[:12]
-        ciphertext = encrypted[12:]
         return aesgcm.decrypt(nonce, ciphertext, None)
 
     def save(self, wallet_id: str, data: dict[str, Any]) -> None:

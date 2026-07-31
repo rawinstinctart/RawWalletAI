@@ -6,7 +6,12 @@ from rawwalletai.chains.utxo_backend import UTXO
 
 
 class ElectrumBackend:
-    """Electrum server backend."""
+    """Electrum server backend.
+
+    NOTE: This is an experimental stub.
+    It depends on the `electrumx` package, which is not currently installed.
+    Implement only when a real Electrum client dependency is added.
+    """
 
     def __init__(self, host: str = "127.0.0.1", port: int = 50001, ssl: bool = False) -> None:
         self.host = host

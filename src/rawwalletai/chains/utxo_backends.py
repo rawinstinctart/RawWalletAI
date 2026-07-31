@@ -10,7 +10,7 @@ from urllib.request import Request, urlopen
 from rawwalletai.chains.utxo_backend import UTXO, UTXOBackend
 
 
-class MockUTXOBackend:
+class MockUTXOBackend(UTXOBackend):
     """In-memory mock backend for testing."""
 
     def __init__(self) -> None:

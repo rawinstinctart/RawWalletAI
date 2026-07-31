@@ -45,15 +45,9 @@ class WalletManager:
             raise RuntimeError("Master key not initialized")
 
         # For now derive a simple keypair from master key
-        from rawwalletai.core.keys import KeyPair
-        keypair = KeyPair(
-            private_key_bytes=master_private_key,
-            public_key_bytes=master_private_key,
-            chain_code=master_chain_code or b"",
-            address="",
-            path="m/84'/0'/0'/0/0",
-        )
-        address = self.chain.generate_address(keypair.public_key_bytes, "p2wpkh")
+        from rawwalletai.transactions.signer import ECKey
+        ec_key = ECKey(master_private_key)
+        address = self.chain.generate_address(ec_key.public_key_bytes(), "p2wpkh")
         wallet = Wallet(
             wallet_id=wallet_id,
             name=name,
@@ -89,9 +83,11 @@ class WalletManager:
             if master_private_key is None:
                 raise RuntimeError("Master key not initialized")
             from rawwalletai.core.keys import KeyPair
+            from rawwalletai.transactions.signer import ECKey
+            ec_key = ECKey(master_private_key)
             keypair = KeyPair(
                 private_key_bytes=master_private_key,
-                public_key_bytes=master_private_key,
+                public_key_bytes=ec_key.public_key_bytes(),
                 chain_code=master_chain_code or b"",
                 address=data["address"],
                 path=data.get("path", ""),
