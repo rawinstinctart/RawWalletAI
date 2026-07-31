@@ -3,13 +3,10 @@
 from __future__ import annotations
 
 import hashlib
-from dataclasses import dataclass
-from typing import Optional
 
-from bech32 import bech32_encode, bech32_decode, convertbits
+from bech32 import bech32_encode, convertbits
 
-from rawwalletai.chains.utxo_backends import UTXO, UTXOBackend, MockUTXOBackend, MempoolUTXOBackend
-from rawwalletai.config.settings import WalletSettings
+from rawwalletai.chains.utxo_backends import UTXOBackend
 
 
 def _double_sha256(data: bytes) -> bytes:
@@ -26,7 +23,7 @@ class BitcoinAddress:
 class BitcoinChain:
     """Bitcoin chain adapter with UTXO backend."""
 
-    def __init__(self, network: str, backend: Optional[UTXOBackend] = None):
+    def __init__(self, network: str, backend: UTXOBackend | None = None):
         self.network = network
         self.backend = backend
         if network == "bitcoin":
@@ -57,7 +54,7 @@ class BitcoinChain:
             raise ValueError(f"Unsupported script type: {script_type}")
         return BitcoinAddress(address=address, script_type=script_type, script_pubkey=script_pubkey)
 
-    def _encode_base58(self, data: bytes, version: Optional[int] = None) -> str:
+    def _encode_base58(self, data: bytes, version: int | None = None) -> str:
         import base58
         if version is not None:
             data = bytes([version]) + data

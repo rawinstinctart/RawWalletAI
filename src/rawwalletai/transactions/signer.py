@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import hashlib
-from dataclasses import dataclass
-from typing import Optional
 
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import ec
 
 
 def _double_sha256(data: bytes) -> bytes:

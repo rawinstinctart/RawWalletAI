@@ -1,6 +1,5 @@
 """Bitcoin chain tests."""
 
-from pathlib import Path
 
 import pytest
 

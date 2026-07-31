@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
-from rawwalletai.chains.utxo_backends import UTXO, UTXOBackend
-from rawwalletai.chains.utxo_engine import UTXOEngine, CoinSelectionResult
-from rawwalletai.chains.broadcast import BroadcastBackend, MockBroadcastBackend
+from rawwalletai.chains.broadcast import BroadcastBackend
+from rawwalletai.chains.utxo_backends import UTXOBackend
+from rawwalletai.chains.utxo_engine import UTXOEngine
+from rawwalletai.core.keys import KeyManager
 from rawwalletai.transactions.builder import TransactionBuilder
 from rawwalletai.transactions.psbt import PSBT, PSBTInput, PSBTOutput
 from rawwalletai.transactions.signer_psbt import PSBTSigner
-from rawwalletai.core.keys import KeyManager
 
 
 @dataclass
@@ -20,21 +19,21 @@ class TransactionRequest:
     to_address: str
     amount_sats: int
     fee_rate: int = 10
-    change_address: Optional[str] = None
-    private_key_bytes: Optional[bytes] = None
+    change_address: str | None = None
+    private_key_bytes: bytes | None = None
     rbf_enabled: bool = False
 
 
 @dataclass
 class TransactionResult:
     success: bool
-    txid: Optional[str] = None
-    tx_hex: Optional[str] = None
+    txid: str | None = None
+    tx_hex: str | None = None
     fee_sats: int = 0
     change_sats: int = 0
     inputs_used: int = 0
     outputs_created: int = 0
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class TransactionPipeline:
@@ -134,7 +133,7 @@ class TransactionPipeline:
         except Exception as e:
             return TransactionResult(success=False, error=f"Finalization/broadcast failed: {e}")
 
-    def _finalize_transaction(self, psbt: PSBT, raw_tx) -> "RawTransaction":
+    def _finalize_transaction(self, psbt: PSBT, raw_tx) -> RawTransaction:
         """Finalize transaction from signed PSBT."""
         # For now, use the raw transaction hex as final
         return raw_tx

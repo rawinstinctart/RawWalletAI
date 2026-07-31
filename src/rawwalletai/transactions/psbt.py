@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Optional
 
 
 def _double_sha256(data: bytes) -> bytes:
@@ -17,8 +16,8 @@ class PSBTInput:
     vout: int
     amount_sats: int
     script_pubkey: bytes
-    signature: Optional[bytes] = None
-    public_key: Optional[bytes] = None
+    signature: bytes | None = None
+    public_key: bytes | None = None
     sighash: int = 1  # SIGHASH_ALL
 
 

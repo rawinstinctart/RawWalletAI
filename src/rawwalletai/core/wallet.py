@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from typing import Optional
 
-from rawwalletai.chains.bitcoin import BitcoinChain, BitcoinAddress
+from rawwalletai.chains.bitcoin import BitcoinAddress, BitcoinChain
 from rawwalletai.core.keys import KeyManager
 from rawwalletai.storage.encrypted import EncryptedStorage
 
@@ -77,7 +76,7 @@ class WalletManager:
         )
         return wallet
 
-    def load_wallet(self, wallet_id: str, passphrase: str = "") -> Optional[Wallet]:
+    def load_wallet(self, wallet_id: str, passphrase: str = "") -> Wallet | None:
         """Load an existing wallet."""
         if wallet_id not in self._wallets:
             try:

@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-from cryptography.hazmat.primitives import hashes
 from pydantic import BaseModel
 
 from rawwalletai.config.settings import WalletSettings

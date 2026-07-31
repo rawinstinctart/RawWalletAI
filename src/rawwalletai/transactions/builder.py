@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 from rawwalletai.transactions.psbt import PSBT, PSBTInput, PSBTOutput
 
@@ -50,20 +49,20 @@ class TransactionBuilder:
         self._outputs: list[TxOutput] = []
         self._fee_rate: int = 10  # sat/vB
 
-    def add_input(self, txid: str, vout: int, amount_sats: int, script: str = "", sequence: Optional[int] = None) -> "TransactionBuilder":
+    def add_input(self, txid: str, vout: int, amount_sats: int, script: str = "", sequence: int | None = None) -> TransactionBuilder:
         if amount_sats < 0:
             raise ValueError("Input amount must be non-negative")
         seq = sequence if sequence is not None else (0xFFFFFFFD if self.rbf_enabled else 0xFFFFFFFF)
         self._inputs.append(TxInput(txid=txid, vout=vout, amount_sats=amount_sats, script=script, sequence=seq))
         return self
 
-    def add_output(self, address: str, amount_sats: int) -> "TransactionBuilder":
+    def add_output(self, address: str, amount_sats: int) -> TransactionBuilder:
         if amount_sats < 0:
             raise ValueError("Output amount must be non-negative")
         self._outputs.append(TxOutput(address=address, amount_sats=amount_sats, script=""))
         return self
 
-    def set_fee_rate(self, sat_per_vbyte: int) -> "TransactionBuilder":
+    def set_fee_rate(self, sat_per_vbyte: int) -> TransactionBuilder:
         if sat_per_vbyte < 1:
             raise ValueError("Fee rate must be at least 1 sat/vB")
         self._fee_rate = sat_per_vbyte

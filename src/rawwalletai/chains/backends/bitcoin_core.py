@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 import json
-from typing import Optional
-from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-from rawwalletai.chains.utxo_backend import UTXO, UTXOBackend
+from rawwalletai.chains.utxo_backend import UTXO
 
 
 class BitcoinCoreBackend:
@@ -38,7 +36,7 @@ class BitcoinCoreBackend:
         result = self._rpc_call("estimatesmartfee", [target_blocks])
         return int(result.get("result", {}).get("feerate", 0.0001) * 100_000_000)
 
-    async def get_transaction(self, txid: str) -> Optional[dict]:
+    async def get_transaction(self, txid: str) -> dict | None:
         result = self._rpc_call("getrawtransaction", [txid, True])
         return result.get("result")
 

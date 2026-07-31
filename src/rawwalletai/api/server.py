@@ -2,17 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from rawwalletai.chains.bitcoin import BitcoinChain
 from rawwalletai.config.settings import WalletSettings
 from rawwalletai.core.keys import KeyManager
 from rawwalletai.core.wallet import WalletManager
 from rawwalletai.storage.encrypted import EncryptedStorage
-from rawwalletai.chains.bitcoin import BitcoinChain
-
 
 app = FastAPI(title="RawWalletAI", version="0.1.0")
 
@@ -25,15 +22,15 @@ wallet_manager = WalletManager(key_manager, storage, chain)
 
 class CreateWalletRequest(BaseModel):
     name: str
-    passphrase: Optional[str] = ""
-    network: Optional[str] = "bitcoin"
+    passphrase: str | None = ""
+    network: str | None = "bitcoin"
 
 
 class SendRequest(BaseModel):
     wallet_id: str
     to: str
     amount_sats: int
-    fee_rate: Optional[int] = None
+    fee_rate: int | None = None
 
 
 @app.get("/health")

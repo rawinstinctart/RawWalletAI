@@ -1,13 +1,11 @@
 """ECDSA signing tests with known test vectors."""
 
-from pathlib import Path
 
 import pytest
 
+from rawwalletai.transactions.psbt import PSBT, PSBTInput, PSBTOutput
 from rawwalletai.transactions.signer import ECKey
 from rawwalletai.transactions.signer_psbt import PSBTSigner
-from rawwalletai.transactions.psbt import PSBT, PSBTInput, PSBTOutput
-
 
 # Known test vector: deterministic key + message
 KNOWN_TEST_VECTOR = {

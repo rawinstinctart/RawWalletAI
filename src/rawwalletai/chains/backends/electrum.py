@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
-from rawwalletai.chains.utxo_backend import UTXO, UTXOBackend
+from rawwalletai.chains.utxo_backend import UTXO
 
 
 class ElectrumBackend:
@@ -38,7 +36,7 @@ class ElectrumBackend:
     async def get_fee_estimate(self, target_blocks: int = 6) -> int:
         raise NotImplementedError("Electrum fee estimation not implemented")
 
-    async def get_transaction(self, txid: str) -> Optional[dict]:
+    async def get_transaction(self, txid: str) -> dict | None:
         raise NotImplementedError("Electrum transaction lookup not implemented")
 
     async def health_check(self) -> bool:

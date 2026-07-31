@@ -5,10 +5,6 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Optional
-from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from rawwalletai.chains.utxo_backend import UTXO, UTXOBackend
@@ -39,7 +35,7 @@ class MockUTXOBackend:
         await asyncio.sleep(0)
         return 10
 
-    async def get_transaction(self, txid: str) -> Optional[dict]:
+    async def get_transaction(self, txid: str) -> dict | None:
         await asyncio.sleep(0)
         return None
 
@@ -92,7 +88,6 @@ class MempoolUTXOBackend:
         return data.get("txid", "")
 
     async def _post(self, path: str, body: str) -> dict:
-        import urllib.parse
         url = f"{self.base_url}/{path.lstrip('/')}"
         req = Request(url, data=body.encode(), headers={"Content-Type": "text/plain"})
         with urlopen(req, timeout=30) as resp:
@@ -103,7 +98,7 @@ class MempoolUTXOBackend:
         key = {1: "fastestFee", 3: "halfHourFee", 6: "hourFee"}.get(target_blocks, "hourFee")
         return int(data.get(key, 10))
 
-    async def get_transaction(self, txid: str) -> Optional[dict]:
+    async def get_transaction(self, txid: str) -> dict | None:
         return await self._get(f"tx/{txid}")
 
     async def health_check(self) -> bool:

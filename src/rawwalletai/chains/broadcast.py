@@ -6,8 +6,6 @@ import asyncio
 import hashlib
 import json
 from abc import ABC, abstractmethod
-from typing import Optional
-from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,7 +13,7 @@ class WalletSettings(BaseModel):
     name: str = Field(default="default")
     network: str = Field(default="bitcoin")
     data_dir: Path = Field(default_factory=lambda: Path.home() / ".rawwalletai")
-    passphrase: Optional[str] = Field(default=None)
+    passphrase: str | None = Field(default=None)
     fee_rate: int = Field(default=2, ge=1, description="satoshis per byte")
 
     model_config = {

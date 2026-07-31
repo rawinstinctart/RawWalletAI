@@ -4,9 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Optional
 
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from mnemonic import Mnemonic
 
 from rawwalletai.config.settings import WalletSettings
@@ -28,9 +26,9 @@ class KeyManager:
 
     def __init__(self, settings: WalletSettings) -> None:
         self.settings = settings
-        self._master_key: Optional[bytes] = None
-        self._master_chain_code: Optional[bytes] = None
-        self._mnemonic: Optional[str] = None
+        self._master_key: bytes | None = None
+        self._master_chain_code: bytes | None = None
+        self._mnemonic: str | None = None
 
     def generate_mnemonic(self, strength: int = 256) -> str:
         """Generate a new BIP-39 mnemonic phrase."""

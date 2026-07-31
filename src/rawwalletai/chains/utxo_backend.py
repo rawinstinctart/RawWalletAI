@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -15,7 +14,7 @@ class UTXO:
     script_pubkey: str
     address: str
     confirmed: bool
-    height: Optional[int] = None
+    height: int | None = None
 
 
 class UTXOBackend(ABC):
@@ -37,7 +36,7 @@ class UTXOBackend(ABC):
         ...
 
     @abstractmethod
-    async def get_transaction(self, txid: str) -> Optional[dict]:
+    async def get_transaction(self, txid: str) -> dict | None:
         """Get transaction details."""
         ...
 

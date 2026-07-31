@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 from rawwalletai.chains.utxo_backends import UTXO, UTXOBackend
 
@@ -14,8 +13,8 @@ class CoinSelectionResult:
     total_amount: int
     fee: int
     change_amount: int
-    change_address: Optional[str] = None
-    error: Optional[str] = None
+    change_address: str | None = None
+    error: str | None = None
 
 
 class UTXOEngine:
@@ -30,7 +29,7 @@ class UTXOEngine:
         address: str,
         amount_sats: int,
         fee_rate: int = 10,
-        change_address: Optional[str] = None,
+        change_address: str | None = None,
     ) -> CoinSelectionResult:
         if amount_sats <= 0:
             return CoinSelectionResult(utxos=[], total_amount=0, fee=0, change_amount=0, error="Amount must be positive")

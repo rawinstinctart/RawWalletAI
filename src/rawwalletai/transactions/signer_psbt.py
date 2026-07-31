@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import hashlib
-from typing import Optional
 
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import ec
 
-from rawwalletai.transactions.psbt import PSBT, PSBTInput
+from rawwalletai.transactions.psbt import PSBT
 
 
 def _double_sha256(data: bytes) -> bytes:

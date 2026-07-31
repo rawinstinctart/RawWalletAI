@@ -1,8 +1,6 @@
 """RBF tests."""
 
-from pathlib import Path
 
-import pytest
 
 from rawwalletai.transactions.builder import TransactionBuilder
 

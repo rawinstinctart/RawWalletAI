@@ -1,15 +1,13 @@
 """Transaction pipeline tests."""
 
-from pathlib import Path
 
 import pytest
 
-from rawwalletai.chains.utxo_backends import UTXO, MockUTXOBackend
-from rawwalletai.chains.utxo_engine import UTXOEngine
 from rawwalletai.chains.broadcast import MockBroadcastBackend
-from rawwalletai.transactions.pipeline import TransactionPipeline, TransactionRequest, TransactionResult
+from rawwalletai.chains.utxo_backends import UTXO, MockUTXOBackend
 from rawwalletai.config.settings import WalletSettings
 from rawwalletai.core.keys import KeyManager
+from rawwalletai.transactions.pipeline import TransactionPipeline, TransactionRequest
 
 
 def make_utxo(address: str, txid: str, amount_sats: int, confirmed: bool = True) -> UTXO:
