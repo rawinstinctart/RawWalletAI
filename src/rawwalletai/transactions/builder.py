@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass
 from typing import Optional
 
@@ -33,25 +32,29 @@ class RawTransaction:
     outputs: list[TxOutput]
     fee_sats: int
     vsize: int
+    rbf_enabled: bool = False
 
 
 def _double_sha256(data: bytes) -> bytes:
+    import hashlib
     return hashlib.sha256(hashlib.sha256(data).digest()).digest()
 
 
 class TransactionBuilder:
     """Builds Bitcoin transactions."""
 
-    def __init__(self, chain) -> None:
+    def __init__(self, chain, rbf_enabled: bool = False) -> None:
         self.chain = chain
+        self.rbf_enabled = rbf_enabled
         self._inputs: list[TxInput] = []
         self._outputs: list[TxOutput] = []
         self._fee_rate: int = 10  # sat/vB
 
-    def add_input(self, txid: str, vout: int, amount_sats: int, script: str = "") -> "TransactionBuilder":
+    def add_input(self, txid: str, vout: int, amount_sats: int, script: str = "", sequence: Optional[int] = None) -> "TransactionBuilder":
         if amount_sats < 0:
             raise ValueError("Input amount must be non-negative")
-        self._inputs.append(TxInput(txid=txid, vout=vout, amount_sats=amount_sats, script=script))
+        seq = sequence if sequence is not None else (0xFFFFFFFD if self.rbf_enabled else 0xFFFFFFFF)
+        self._inputs.append(TxInput(txid=txid, vout=vout, amount_sats=amount_sats, script=script, sequence=seq))
         return self
 
     def add_output(self, address: str, amount_sats: int) -> "TransactionBuilder":
@@ -103,4 +106,5 @@ class TransactionBuilder:
             outputs=list(self._outputs),
             fee_sats=fee,
             vsize=vsize,
+            rbf_enabled=self.rbf_enabled,
         )

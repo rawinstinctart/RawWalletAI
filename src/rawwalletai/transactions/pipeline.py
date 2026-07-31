@@ -22,6 +22,7 @@ class TransactionRequest:
     fee_rate: int = 10
     change_address: Optional[str] = None
     private_key_bytes: Optional[bytes] = None
+    rbf_enabled: bool = False
 
 
 @dataclass
@@ -52,6 +53,11 @@ class TransactionPipeline:
 
     async def execute(self, request: TransactionRequest) -> TransactionResult:
         """Execute complete transaction pipeline."""
+        if len(request.to_address) < 10:
+            return TransactionResult(success=False, error="Invalid destination address")
+        if request.private_key_bytes is not None and len(request.private_key_bytes) != 32:
+            return TransactionResult(success=False, error="Invalid private key length")
+
         # Step 1: Coin selection
         selection = await self.utxo_engine.select_coins(
             request.from_address,
@@ -63,8 +69,16 @@ class TransactionPipeline:
         if selection.error:
             return TransactionResult(success=False, error=selection.error)
 
+        # Mark selected UTXOs as used to prevent duplicate spending
+        for utxo in selection.utxos:
+            self.utxo_engine.mark_used(utxo.txid)
+
+        # Fee sanity check
+        if selection.fee > selection.total_amount:
+            return TransactionResult(success=False, error="Fee exceeds available amount")
+
         # Step 2: Build transaction
-        builder = TransactionBuilder(None)
+        builder = TransactionBuilder(None, rbf_enabled=request.rbf_enabled)
         for utxo in selection.utxos:
             builder.add_input(utxo.txid, utxo.vout, utxo.amount_sats, utxo.script_pubkey)
 
@@ -107,11 +121,11 @@ class TransactionPipeline:
         # Step 5: Finalize and broadcast
         try:
             final_tx = self._finalize_transaction(psbt, tx)
-            txid = await self.broadcast_backend.broadcast_transaction(final_tx.hex())
+            txid = await self.broadcast_backend.broadcast_transaction(final_tx.hex)
             return TransactionResult(
                 success=True,
                 txid=txid,
-                tx_hex=final_tx.hex(),
+                tx_hex=final_tx.hex,
                 fee_sats=selection.fee,
                 change_sats=selection.change_amount,
                 inputs_used=len(selection.utxos),
