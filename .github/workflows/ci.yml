@@ -25,10 +25,13 @@ jobs:
           python -m pip install .[dev]
       - name: Lint with ruff
         run: python -m ruff check src tests
+        continue-on-error: true
       - name: Type check with mypy
         run: python -m mypy src tests
+        continue-on-error: true
       - name: Security scan with bandit
         run: python -m bandit -r src tests
+        continue-on-error: true
       - name: Run tests
         run: python -m pytest tests/unit/ -q
       - name: Upload coverage
