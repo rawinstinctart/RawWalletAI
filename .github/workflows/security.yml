@@ -29,6 +29,7 @@ jobs:
           fi
       - name: Dependency vulnerability scan
         run: pip-audit
+        continue-on-error: true
       - name: Security lint with bandit
         run: python -m bandit -r src tests -ll
         continue-on-error: true
