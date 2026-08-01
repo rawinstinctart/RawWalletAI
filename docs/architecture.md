@@ -30,3 +30,8 @@ RawWalletAI is a Bitcoin-only, self-custody wallet engine with PSBT-based transa
 - Unit tests for each module
 - Integration tests for PSBT signing
 - BIP-32 derivation tests
+
+## Known Blockers
+- PSBT finalization requires audited external library/wrapper
+- Electrum backend removed pending `electrumx` package
+- Secret zeroization is limited in CPython; use process isolation for production
