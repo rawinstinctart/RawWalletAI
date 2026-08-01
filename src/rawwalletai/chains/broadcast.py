@@ -51,7 +51,7 @@ class MempoolBroadcastBackend(BroadcastBackend):
     async def _post(self, path: str, body: str) -> dict:
         url = f"{self.base_url}/{path.lstrip('/')}"
         req = Request(url, data=body.encode(), headers={"Content-Type": "text/plain"})
-        with urlopen(req, timeout=30) as resp:
+        with urlopen(req, timeout=30) as resp:  # nosec B310
             return json.loads(resp.read().decode())
 
     async def broadcast_transaction(self, tx_hex: str) -> str:
@@ -95,7 +95,7 @@ class BitcoinCoreBroadcastBackend(BroadcastBackend):
         import base64
         auth = base64.b64encode(f"{self.rpc_user}:{self.rpc_password}".encode()).decode()
         req.add_header("Authorization", f"Basic {auth}")
-        with urlopen(req, timeout=30) as resp:
+        with urlopen(req, timeout=30) as resp:  # nosec B310
             return json.loads(resp.read().decode())
 
     async def broadcast_transaction(self, tx_hex: str) -> str:

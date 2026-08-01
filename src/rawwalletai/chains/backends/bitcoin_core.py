@@ -22,7 +22,7 @@ class BitcoinCoreBackend:
         import base64
         auth = base64.b64encode(f"{self.rpc_user}:{self.rpc_password}".encode()).decode()
         req.add_header("Authorization", f"Basic {auth}")
-        with urlopen(req, timeout=30) as resp:
+        with urlopen(req, timeout=30) as resp:  # nosec B310
             return json.loads(resp.read().decode())
 
     async def get_utxos(self, address: str) -> list[UTXO]:

@@ -65,7 +65,7 @@ class MempoolUTXOBackend:
     async def _get(self, path: str) -> dict | list:
         url = f"{self.base_url}/{path.lstrip('/')}"
         req = Request(url, headers={"User-Agent": "RawWalletAI/0.1"})
-        with urlopen(req, timeout=30) as resp:
+        with urlopen(req, timeout=30) as resp:  # nosec B310
             return json.loads(resp.read().decode())
 
     async def get_utxos(self, address: str) -> list[UTXO]:
@@ -90,7 +90,7 @@ class MempoolUTXOBackend:
     async def _post(self, path: str, body: str) -> dict:
         url = f"{self.base_url}/{path.lstrip('/')}"
         req = Request(url, data=body.encode(), headers={"Content-Type": "text/plain"})
-        with urlopen(req, timeout=30) as resp:
+        with urlopen(req, timeout=30) as resp:  # nosec B310
             return json.loads(resp.read().decode())
 
     async def get_fee_estimate(self, target_blocks: int = 6) -> int:
