@@ -174,6 +174,7 @@ To support these features, RawWalletAI needs:
 2. Create ADR-0003: CI/CD and release engineering
 3. Create ADR-0004: Cross-platform support strategy
 4. Create ADR-0005: Long-term maintenance model
-5. Implement minimal PyO3 wrapper for PSBT finalization
-6. Integration tests against regtest
-7. External security audit
+5. Create ADR-0006: Wrapper API design
+6. Implement minimal PyO3 wrapper for PSBT finalization
+7. Integration tests against regtest
+8. External security audit

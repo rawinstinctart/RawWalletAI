@@ -3,19 +3,9 @@
 **Status:** Proposed  
 **Date:** 2026-08-01  
 **Decision Owner:** Pascal Haux / RawInstinctAI  
-**Context:** Post-ADR-0001, preparing for rust-bitcoin integration
+**Context:** Post-ADR-0007, preparing for rust-bitcoin integration
 
 ---
-
-## Context
-
-We have accepted rust-bitcoin as the PSBT finalization library. This requires:
-
-1. A Rust toolchain in the build environment
-2. PyO3-based Python bindings
-3. Cross-platform wheel building
-4. Version pinning for rust-bitcoin
-5. Fallback behavior when Rust is unavailable
 
 ## Current State
 
@@ -23,6 +13,7 @@ We have accepted rust-bitcoin as the PSBT finalization library. This requires:
 - No compiled extensions
 - Dependencies installed via pip
 - CI runs on Ubuntu only
+- Version: 0.1.0
 
 ## Problem
 
@@ -43,11 +34,14 @@ Adding rust-bitcoin via PyO3 changes the project from pure-Python to a mixed Pyt
 - Builds wheels for all platforms
 - Integrates with pip
 - Supports optional Rust dependencies
+- Active maintenance
+- Industry standard for Rust+Python projects
 
 ### Disadvantages
 - Additional build dependency
 - Requires Rust toolchain on developer machines
 - Wheels must be prebuilt for release
+- Maturin-specific configuration
 
 ## Option B — setuptools-rust
 
@@ -60,6 +54,7 @@ Adding rust-bitcoin via PyO3 changes the project from pure-Python to a mixed Pyt
 - Less mature than maturin
 - Fewer PyO3-specific features
 - Wheel building more manual
+- Smaller community
 
 ## Option C — scikit-build / scikit-build-core
 
@@ -72,10 +67,11 @@ Adding rust-bitcoin via PyO3 changes the project from pure-Python to a mixed Pyt
 - Overkill for single PyO3 extension
 - CMake knowledge required
 - More complex configuration
+- Heavier dependency
 
 ## Recommendation
 
-**maturin** as the primary build tool.
+**Option A — maturin**
 
 ### Rationale
 - Best PyO3 support
@@ -83,13 +79,14 @@ Adding rust-bitcoin via PyO3 changes the project from pure-Python to a mixed Pyt
 - Wheel building automation
 - Active maintenance
 - Industry standard for Rust+Python projects
+- Aligns with rust-bitcoin ecosystem
 
 ## Required Setup
 
-1. Add `maturin` to dev dependencies
-2. Add `rust-bitcoin` to Cargo.toml
+1. Add `maturin` to dev dependencies in `pyproject.toml`
+2. Add `rust-bitcoin` to `Cargo.toml`
 3. Create PyO3 wrapper module in `src/rawwalletai/rust/`
-4. Configure maturin in pyproject.toml
+4. Configure maturin in `pyproject.toml`
 5. Add Rust toolchain check to CI
 6. Document Rust installation for developers
 
@@ -99,6 +96,7 @@ When Rust is unavailable:
 - Graceful import error with clear message
 - PSBT finalization methods raise `ImportError` with instructions
 - Other wallet functionality remains operational
+- Pure-Python mode for development
 
 ## Consequences
 
