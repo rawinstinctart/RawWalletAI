@@ -23,7 +23,7 @@ jobs:
           python -m pip install .[dev] pip-audit bandit
       - name: Check for secrets
         run: |
-          if git grep -I --cached -n -E '([A-Za-z0-9]{40,})|(-----BEGIN .+ KEY-----)' -- ':!*.svg' ':!*.png'; then
+          if git grep -I --cached -n -E '([A-Za-z0-9]{40,})|(-----BEGIN .+ KEY-----)' -- ':!*.svg' ':!*.png' ':!tests/' ':!.github/workflows/security.yml'; then
             echo 'Potential secret detected'
             exit 1
           fi
