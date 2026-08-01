@@ -1,9 +1,9 @@
 # ADR-0001 — PSBT Finalization Strategy
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-08-01  
 **Decision Owner:** Pascal Haux / RawInstinctAI  
-**Context:** RawWalletAI architecture freeze, PSBT finalization release blocker
+**Context:** Architecture Freeze, PSBT finalization release blocker
 
 ---
 
@@ -24,12 +24,6 @@ RawWalletAI is a Bitcoin-only, self-custody wallet engine with the following cha
 - **PSBT finalization:** Missing
 - **Witness construction:** Missing
 - **Raw transaction extraction:** Stub only
-
-### Current Blockers
-
-- `python-bitcoinlib` does not expose PSBT finalization APIs in this environment
-- No audited Bitcoin serialization library with witness support is installed
-- Custom serialization is explicitly forbidden by project policy
 
 ---
 
@@ -59,19 +53,18 @@ RawWalletAI cannot become version 1.0 today because it cannot produce valid, bro
 **Advantages:**
 - Already installed in current environment
 - Minimal dependency footprint
-- Familiar API surface
 
 **Disadvantages:**
-- **No PSBT finalization support** in current version
+- **No PSBT finalization support**
 - Low maintenance activity
 - No witness serialization
 - Would require custom implementation violating project policy
 
 **Maintenance:** Low  
 **Security:** Medium  
-**Future Compatibility:** Poor (no Taproot support planned)
+**Future Compatibility:** Poor
 
-**Verdict:** Rejected — does not solve the problem
+**Verdict:** Rejected
 
 ---
 
@@ -80,21 +73,18 @@ RawWalletAI cannot become version 1.0 today because it cannot produce valid, bro
 **Advantages:**
 - Active maintenance
 - SegWit support
-- Python-native API
 
 **Disadvantages:**
-- **Partial PSBT support only** — no guaranteed finalization
+- **Partial PSBT support only**
 - **Heavy dependency footprint:** SQLAlchemy, fastecdsa, pycryptodome
 - Increased attack surface
-- Overkill for wallet engine that prefers minimal dependencies
-- License: MIT (compatible)
+- Overkill for minimal wallet engine
 
 **Dependency Footprint:** Very High  
-**Attack Surface:** High  
 **Maintenance:** Active  
 **Security:** Medium
 
-**Verdict:** Rejected — violates minimal-dependency principle and does not guarantee full PSBT finalization
+**Verdict:** Rejected
 
 ---
 
@@ -115,12 +105,12 @@ RawWalletAI cannot become version 1.0 today because it cannot produce valid, bro
 - Higher integration complexity
 - Wrapper maintenance burden
 
-**Security:** High (Rust memory safety + audited code)  
+**Security:** High  
 **Performance:** High  
-**Maintainability:** Medium (requires wrapper maintenance)  
+**Maintainability:** Medium  
 **Future Taproot Support:** Full
 
-**Verdict:** **Recommended** — best long-term solution, but requires architectural decision and implementation effort
+**Verdict:** **Accepted** — chosen as strategic solution
 
 ---
 
@@ -137,39 +127,53 @@ RawWalletAI cannot become version 1.0 today because it cannot produce valid, bro
 
 ## Decision
 
-**Current Recommendation:** Adopt rust-bitcoin via a maintained PyO3 wrapper.
+**Recommendation:** Adopt rust-bitcoin via a maintained PyO3 wrapper.
 
 **Rationale:**
 - Only option with complete PSBT finalization support
 - Aligns with long-term maintainability goals
 - Supports future Taproot requirements
 - MIT license compatible
+- Matches RawWalletAI's unique value proposition: not just another Bitcoin signer, but an autonomous agent platform
 
-**Required Validation:**
-1. Verify PyO3 wrapper stability and API completeness
-2. Assess Rust toolchain requirements for target deployment environments
-3. Evaluate build complexity and CI/CD integration
-4. Conduct security review of wrapper boundary
+### Why This Matters for RawWalletAI's Unique Position
 
-**Remaining Unknowns:**
-- Maturity of existing PyO3 bindings for rust-bitcoin
-- Build reliability across Linux distributions
-- Long-term wrapper maintenance model
+RawWalletAI is not competing with existing wallets on basic Bitcoin features. Its unique value is:
 
-**Decision Status:** Proposed  
-**Next Step:** Formal architectural decision and implementation planning
+- 🤖 Hermes integration for autonomous agents
+- 👥 Multi-agent rights management
+- 🔒 Encrypted wallet management
+- 📋 Approval workflows
+- 📊 Portfolio overview
+- 💸 Payment policies and limits
+- 📝 Audit logs
+- 🔌 Extensible backends
+
+To support these features, RawWalletAI needs:
+1. **Reliable transaction finalization** — rust-bitcoin provides this
+2. **Future Taproot support** — rust-bitcoin provides this
+3. **High performance** — important for agent-driven automation
+4. **Security** — Rust memory safety reduces attack surface
+5. **Maintainability** — active project, clear upgrade path
 
 ---
 
 ## Consequences
 
-If approved:
 - Rust toolchain becomes a build dependency
 - Additional CI complexity for cross-platform builds
 - Long-term maintainability burden for wrapper
 - Path to 1.0 release enabled
+- Foundation for unique agent-centric features established
 
-If rejected:
-- RawWalletAI remains non-functional for Bitcoin transactions
-- No clear path to 1.0 release
-- Alternative: explicit "not production-ready" documentation indefinitely
+---
+
+## Next Steps
+
+1. Create ADR-0002: Build tooling and packaging strategy
+2. Create ADR-0003: CI/CD and release engineering
+3. Create ADR-0004: Cross-platform support strategy
+4. Create ADR-0005: Long-term maintenance model
+5. Implement minimal PyO3 wrapper for PSBT finalization
+6. Integration tests against regtest
+7. External security audit
