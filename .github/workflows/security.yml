@@ -1,0 +1,36 @@
+name: Security
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .[dev] pip-audit
+      - name: Check for secrets
+        run: |
+          if git grep -I --cached -n -E '([A-Za-z0-9]{40,})|(-----BEGIN .+ KEY-----)' -- ':!*.svg' ':!*.png'; then
+            echo 'Potential secret detected'
+            exit 1
+          fi
+      - name: Dependency vulnerability scan
+        run: pip-audit
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: bandit.sarif
