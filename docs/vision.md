@@ -1,16 +1,26 @@
-# RawWalletAI – Vision and Unique Value Proposition
+# RawWalletAI – Vision
 
-RawWalletAI is not just another Bitcoin wallet. It is an autonomous, agent-centric wallet engine designed for AI-driven financial workflows.
+RawWalletAI is **not** another cryptocurrency wallet.
 
-## What Makes RawWalletAI Unique
+It is an **AI-native Wallet Engine** for autonomous agents, applications, and secure self-custody.
 
-Not:
-- Bitcoin signatures
-- Script engine
-- PSBT parser
+## Core Positioning
 
-But:
-- 🤖 **Hermes integration** — native autonomous agent control
+Bitcoin consensus logic is delegated to mature, audited external libraries.
+
+RawWalletAI focuses on:
+- orchestration
+- security
+- extensibility
+- AI agent integration
+- policy-based transaction approval
+- multi-agent permissions
+- secure storage
+- extensible backends
+
+## What RawWalletAI Provides
+
+- 🤖 **Native autonomous agent control** — first-class Hermes integration
 - 👥 **Multi-agent rights management** — granular permissions per agent
 - 🔒 **Encrypted wallet management** — secure key storage and access control
 - 📋 **Approval workflows** — multi-party transaction authorization
@@ -19,15 +29,13 @@ But:
 - 📝 **Audit logs** — complete transaction history with compliance
 - 🔌 **Extensible backends** — pluggable broadcast, UTXO, and chain adapters
 
-## Strategic Positioning
+## What RawWalletAI Does Not Do
 
-RawWalletAI targets:
-
-- AI agents executing autonomous financial workflows
-- Multi-agent systems with delegated authority
-- Privacy-first, self-custody architectures
-- Linux/Termux environments
-- Automated payment policies and compliance
+- reimplement Bitcoin consensus rules
+- replace Bitcoin Core or rust-bitcoin
+- expose raw PSBT manipulation as primary interface
+- add unnecessary dependencies
+- compromise on security or auditability
 
 ## Technical Philosophy
 
@@ -36,13 +44,22 @@ RawWalletAI targets:
 - No proprietary protocols
 - Open source, transparent
 - Security-first design
+- Python orchestration + Rust execution boundary
 
 ## Long-Term Vision
 
 RawWalletAI becomes the standard wallet engine for autonomous AI systems, enabling:
+- autonomous microtransactions
+- multi-agent treasury management
+- compliance-driven payment flows
+- privacy-preserving financial automation
+- decentralized agent economies
 
-- Autonomous microtransactions
-- Multi-agent treasury management
-- Compliance-driven payment flows
-- Privacy-preserving financial automation
-- Decentralized agent economies
+## Target Environment
+
+- Linux
+- Termux / Android
+- Server-side automation
+- Headless operation
+- API-first access
+- Hermes agent integration
