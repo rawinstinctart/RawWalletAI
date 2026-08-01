@@ -29,8 +29,3 @@ jobs:
           fi
       - name: Dependency vulnerability scan
         run: pip-audit
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: bandit.sarif
