@@ -2,6 +2,23 @@
 
 > **Autonome Krypto-Wallet-Engine für automatisierte Systeme und KI-Agenten.**
 
+## Was RawWalletAI einzigartig macht
+
+Nicht:
+- Bitcoin-Signaturen
+- Script-Engine
+- PSBT-Parser
+
+Sondern:
+- 🤖 Hermes-Integration
+- 👥 Mehrere Agenten mit unterschiedlichen Rechten
+- 🔒 Verschlüsselte Wallet-Verwaltung
+- 📋 Freigabe-Workflows
+- 📊 Portfolio-Übersicht
+- 💸 Zahlungsrichtlinien
+- 📝 Audit-Logs
+- 🔌 Erweiterbare Backends
+
 ## Ziele
 - Keine Registrierung, kein KYC, keine zentralen Anbieter
 - Vollständige Self-Custody
