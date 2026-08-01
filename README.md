@@ -26,7 +26,11 @@ Sondern:
 - Sicherheit durch auditierten Code und standardisierte Kryptografie
 
 ## Status
-- Phase 1: Grundgerüst stabil
+
+- Architecture Freeze aktiv
+- Phase A — Rust Foundation abgeschlossen
+- Phase B — Wrapper API geplant
+- Hybrid Python + Rust Architektur
 - Bitcoin on-chain als erste Chain
 - ECDSA + PSBT-basierte Transaktionen
 - UTXO-Engine mit austauschbaren Backends

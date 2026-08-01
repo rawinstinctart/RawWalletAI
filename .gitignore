@@ -55,3 +55,4 @@ logs/
 
 # Node
 node_modules/
+rust-core/target/
